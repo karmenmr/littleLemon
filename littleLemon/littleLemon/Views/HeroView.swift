@@ -1,10 +1,3 @@
-//
-//  HeroView.swift
-//  littleLemon
-//
-//  Created by Karmen Mirzoyan on 4/18/26.
-//
-
 import SwiftUI
 
 struct HeroView: View {

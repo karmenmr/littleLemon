@@ -1,10 +1,3 @@
-//
-//  Details.swift
-//  littleLemon
-//
-//  Created by Karmen Mirzoyan on 4/13/26.
-//
-
 import SwiftUI
 
 struct Details: View {

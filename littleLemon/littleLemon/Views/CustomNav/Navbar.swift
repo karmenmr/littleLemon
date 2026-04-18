@@ -1,10 +1,3 @@
-//
-//  Navbar.swift
-//  littleLemon
-//
-//  Created by Karmen Mirzoyan on 4/16/26.
-//
-
 import SwiftUI
 
 struct Navbar: View {
