@@ -1,8 +1,8 @@
 //
 //  Persistence.swift
-//  littleLemon
+//  something
 //
-//  Created by Karmen Mirzoyan on 4/9/26.
+//  Created by Karmen Mirzoyan on 4/18/26.
 //
 
 import CoreData
@@ -32,7 +32,7 @@ struct PersistenceController {
     let container: NSPersistentContainer
 
     init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "littleLemon")
+        container = NSPersistentContainer(name: "something")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
