@@ -207,7 +207,7 @@
       "name": "Baba Ganoush", 
       "price": 15.00, 
       "category": "starters",
-      "description": "Smoky roasted eggplant dip.", 
+      "description": "Smoky roasted eggplant dip. Creamy, savory, smoky eggplant dip with tahini, garlic and citrus, this authentic baba ganoush recipe is a must-try!", 
       "image": "menu-item29",
     },
     { 

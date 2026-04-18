@@ -24,6 +24,13 @@ class DishModel: ObservableObject {
         }
     }
     
+    @Published var showDish = false
+    var selectedDish: Dish? = nil {
+        didSet {
+            showDish = selectedDish != nil
+        }
+    }
+    
     private let dataService = MenuDataService()
     
     private init(_ viewContext: NSManagedObjectContext, isPreview: Bool = false) {
@@ -70,8 +77,11 @@ extension DishModel {
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare))]
         
         do {
-            dishes = try viewContext.fetch(request)
-            print(dishes.count)
+            dishes.removeAll()
+            let fetchResult = try viewContext.fetch(request)
+            if !fetchResult.isEmpty {
+                dishes.append(contentsOf: fetchResult)
+            }
             guard !isSearchUpdate else { return }
             
             var arr = Set<String>()

@@ -4,31 +4,18 @@ internal import CoreData
 struct Menu: View {
     @EnvironmentObject private var model: DishModel
     @State var searchText = ""
-        
+
     var body: some View {
-//        ScrollView {
-            VStack(alignment: .center) {
-                VStack {
-                    Topbar
-                    OrderForDelivery
-                }
-//                .layoutPriority(1)
-//                Spacer()
-                MenuItems
-            }
-//        }
+        VStack(alignment: .center) {
+            Hero
+            MenuItems
+        }
     }
 }
 
 #Preview {
     Menu()
         .environmentObject(DishModel.preview)
-}
-
-extension Menu {
-    private func categorySelected(_ category: String) {
-        
-    }
 }
 
 extension Menu {
@@ -43,6 +30,14 @@ extension Menu {
         }
     }
     
+    private var Hero: some View {
+        VStack(alignment: .center) {
+            Topbar
+            OrderForDelivery
+                .layoutPriority(1)
+        }
+    }
+    
     private var OrderForDelivery: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
@@ -54,14 +49,18 @@ extension Menu {
                 HStack {
                     ForEach(model.categories, id: \.self) { category in
                         Spacer()
-                        Button(category, action:categorySelected) 
-                            .font(.custom("Karla-Regular_Bold", size: 18))
-                            .foregroundStyle(Color.primGreen)
-                            .padding(8)
-                            .background {
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color.primGreen.opacity(0.1))
-                            }
+                        let selected = model.selectedCategory == category
+                        Button(category) {
+                            model.selectedCategory = selected ? nil : category
+                        }
+                        .font(.custom("Karla-Regular_Bold", size: 18))
+                        .foregroundStyle(selected ? Color.lightAccent : Color.primGreen)
+                        .padding(8)
+                        .background {
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color.primGreen.opacity(selected ? 1.0 : 0.1))
+                        }
+                        
                         Spacer()
                     }
                 }
@@ -73,14 +72,15 @@ extension Menu {
     }
     
     private var MenuItems: some View {
-        VStack {
-            List {
-                ForEach(model.dishes) { dish in
-                    DishItemDetail(dish)
-                }
+        List {
+            ForEach(model.dishes) { dish in
+                DishItemDetail(dish)
+                    .onTapGesture {
+                        model.selectedDish = dish
+                    }
             }
-            .listStyle(.plain)
         }
+        .listStyle(.plain)
     }
     
 }

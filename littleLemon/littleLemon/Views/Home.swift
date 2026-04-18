@@ -28,8 +28,17 @@ struct Home: View {
                     EditUserProfile()
                         .environmentObject(userModel)
                 }
+                .navigationDestination(isPresented: $userModel.showFeedback) {
+                    Feedback()
+                }
+                .navigationDestination(isPresented: $dishModel.showDish) {
+                    if let dish = dishModel.selectedDish { DishDetail(dish)
+                            .environmentObject(dishModel)
+                    } else {
+                        EmptyView()
+                    }
+                }
             }
-            
         }
     }
 }
@@ -37,3 +46,4 @@ struct Home: View {
 #Preview {
     Home()
 }
+

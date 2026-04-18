@@ -5,6 +5,7 @@ class UserModel: ObservableObject {
     var user: User = User.shared
     
     @Published var showEditProfile = false
+    @Published var showFeedback = false
     @Published var isLoggedIn = false {
         didSet {
             if !isLoggedIn {

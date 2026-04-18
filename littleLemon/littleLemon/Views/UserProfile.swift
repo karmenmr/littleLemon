@@ -27,7 +27,7 @@ extension UserProfile {
         model.showEditProfile = true
     }
     private func sendFeedback() {
-        model.showEditProfile = true
+        model.showFeedback = true
     }
 }
 

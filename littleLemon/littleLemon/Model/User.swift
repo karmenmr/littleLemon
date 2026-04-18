@@ -42,16 +42,16 @@ struct User: Codable {
     }
     
     @discardableResult
-    mutating func save(firstName: String, lastname: String, email: String, phoneNumber: String = "") -> Bool {
+    mutating func save(firstName: String, lastname: String, email: String, phoneNumber: String = "") -> User? {
         let user = User(firstName: firstName, lastName: lastname, email: email, phoneNumber: phoneNumber)
         if user.save() {
             self.firstName = user.firstName
             self.lastName = user.lastName
             self.email = user.email
             self.phoneNumber = user.phoneNumber
-            return true
+            return self
         }
-        return false
+        return nil
     }
     
     mutating func logout() {

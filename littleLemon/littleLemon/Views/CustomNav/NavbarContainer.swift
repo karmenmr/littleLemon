@@ -1,11 +1,5 @@
-//
-//  NavbarContainer.swift
-//  littleLemon
-//
-//  Created by Karmen Mirzoyan on 4/16/26.
-//
-
 import SwiftUI
+
 
 struct NavbarContainer<Content: View>: View {
     @State private var hideBackButton = true
@@ -18,11 +12,13 @@ struct NavbarContainer<Content: View>: View {
     }
     
     var body: some View {
+        
         VStack(spacing: 0) {
             Navbar(hideBackButton: hideBackButton, showTitleView: showTitleView, showRightView: showRightView)
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        
         .onPreferenceChange(NavbarTitleShowPreferenceKey.self) { value in
             self.showTitleView = value
         }

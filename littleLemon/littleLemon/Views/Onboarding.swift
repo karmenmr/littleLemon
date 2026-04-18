@@ -2,10 +2,12 @@ import SwiftUI
 
 struct Onboarding: View {
     @EnvironmentObject var model: UserModel
-    @State var firstName: String = ""
-    @State var lastName: String = ""
-    @State var email: String = ""
-    @State var phoneNumber: String = ""
+    @State var firstName = ""
+    @State var lastName = ""
+    @State var email = ""
+    @State var phoneNumber = ""
+    @State var errorMessage = ""
+    @State var showErrorMessage = false
     
     enum Field: Hashable { case firstName, lastName, email, phoneNumber }
     @FocusState private var focusField: Field?
@@ -29,10 +31,15 @@ struct Onboarding: View {
                     email = ""
                     phoneNumber = ""
                     focusField = nil //.firstName
+                    errorMessage = ""
+                    showErrorMessage = false
                 }
                 Spacer()
             }
         }
+        .alert(errorMessage, isPresented: $showErrorMessage, actions: {
+            Button("Okay") {}
+        })
     }
 }
 
@@ -41,6 +48,27 @@ struct Onboarding: View {
         .environment(\.font, .custom("Karla-Regular", size: 18))
 }
 
+extension Onboarding {
+    
+    private func validateInputs() -> Bool {
+        errorMessage = ""
+        if !isValid(name: firstName) || !isValid(name: lastName) {
+            errorMessage = "Names can only contain letters and must have at least 3 characters.\n"
+        }
+        if !isValid(email: email) {
+            errorMessage += "The email is invalid and cannot be blank.\n"
+        }
+        if !phoneNumber.isEmpty && phoneNumber.count != 10 {
+            errorMessage += "The phone number is invalid\n"
+        }
+        if !errorMessage.isEmpty {
+            showErrorMessage.toggle()
+            return false
+        }
+        return true
+    }
+    
+}
 
 extension Onboarding {
     private var Tobbar: some View {
@@ -99,7 +127,8 @@ extension Onboarding {
     
     private var Register: some View {
         Button("Register") {
-            if  isValid(email) && model.user.save(firstName: firstName, lastname: lastName, email: email, phoneNumber: phoneNumber) {
+            if validateInputs(),
+               let _ = model.user.save(firstName: firstName, lastname: lastName, email: email, phoneNumber: formatPhone(phoneNumber)) {
                 model.isLoggedIn = true
             } else {
                 print("no validation")

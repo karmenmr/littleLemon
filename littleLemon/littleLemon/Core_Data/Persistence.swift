@@ -9,16 +9,18 @@ struct PersistenceController {
         let viewContext = result.container.viewContext
         
         let dish = Dish(context: viewContext)
-        dish.name = "Sample Dish 1"
+        dish.name = "Sample Dish 1 (main)"
         dish.price = 10.99
         dish.desc = "A description of a dish"
         dish.image = "littlelemon-hero"
+        dish.category = "mains"
         
         let dish2 = Dish(context:viewContext)
-        dish2.name = "Sample Dish 2"
+        dish2.name = "Sample Dish 2(dessert)"
         dish2.price = 8.99
         dish2.desc = "A description of a dish2"
         dish2.image = "littlelemon-hero"
+        dish2.category = "desserts"
         
         do {
             try viewContext.save()
