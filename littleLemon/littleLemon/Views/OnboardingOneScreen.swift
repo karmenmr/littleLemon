@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct Onboarding: View {
+struct OnboardingOneScreen: View {
     @EnvironmentObject var model: UserModel
     @State var firstName = ""
     @State var lastName = ""
@@ -8,42 +8,47 @@ struct Onboarding: View {
     @State var phoneNumber = ""
     @State var errorMessage = ""
     @State var showErrorMessage = false
-    @State var selectedTag = 0
+    
     enum Field: Hashable { case firstName, lastName, email, phoneNumber }
     @FocusState private var focusField: Field?
     
     var body: some View {
-        VStack {
-            Tobbar
-            TabView(selection: $selectedTag) {
-                FirstNameField
-                    .tag(0)
-                LastNameField
-                    .tag(1)
-                EmailField
-                    .tag(2)
-                PhoneNumberField
-                    .tag(3)
+        ScrollView {
+            VStack {
+                Tobbar
+                VStack(alignment: .center, spacing: 20) {
+                    FirstNameField
+                    LastNameField
+                    EmailField
+                    PhoneNumberField
+                    Spacer()
+                    Register
+                }
+                .padding()
+                .onAppear {
+                    firstName = ""
+                    lastName = ""
+                    email = ""
+                    phoneNumber = ""
+                    focusField = nil //.firstName
+                    errorMessage = ""
+                    showErrorMessage = false
+                }
+                Spacer()
             }
-            .padding()
-            .tabViewStyle(.page)
-            
-            Spacer()
         }
         .alert(errorMessage, isPresented: $showErrorMessage, actions: {
             Button("Okay") {}
         })
-        
-        
-        
     }
 }
 
 #Preview {
     Onboarding()
+        .environment(\.font, .custom("Karla-Regular", size: 18))
 }
 
-extension Onboarding {
+extension OnboardingOneScreen {
     
     private func validateInputs() -> Bool {
         errorMessage = ""
@@ -63,81 +68,39 @@ extension Onboarding {
         return true
     }
     
-    private func validateName(name: String) -> Bool {
-        if isValid(name: name) {
-            return true
-        }
-        errorMessage = "Names can only contain letters and must have at least 3 characters.\n"
-        showErrorMessage.toggle()
-        return false
-    }
-    
-    private func validateEmail(email: String) -> Bool {
-        if isValid(email: email) {
-           return true
-        }
-        errorMessage = "The email is invalid and cannot be blank.\n"
-        showErrorMessage.toggle()
-        return false
-    }
 }
 
-
-extension Onboarding {
+extension OnboardingOneScreen {
     private var Tobbar: some View {
         TopView()
     }
     
     private var FirstNameField: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading) {
             Text("First Name*")
                 .modifier(TextLabelModifier())
-            
             TextField("First Name", text: $firstName)
                 .modifier(FieldModifier())
                 .focused($focusField, equals: .firstName)
                 .submitLabel(.next)
                 .onSubmit { focusField = .lastName }
-            
-            Button("Next") {
-                if validateName(name: firstName) {
-                   selectedTag = 1
-                } else {
-                    print("no validation")
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .modifier(ButtonModifierPrimary(.primYellow, textColor: .darkAccent))
-            Spacer()
         }
     }
     
     private var LastNameField: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading) {
             Text("Last Name*")
                 .modifier(TextLabelModifier())
-            
             TextField("Last Name", text: $lastName)
                 .modifier(FieldModifier())
                 .focused($focusField, equals: .lastName)
                 .submitLabel(.next)
                 .onSubmit { focusField = .email }
-            
-            Button("Next") {
-                if validateName(name: lastName) {
-                   selectedTag = 2
-                } else {
-                    print("no validation")
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .modifier(ButtonModifierPrimary(.primYellow, textColor: .darkAccent))
-            Spacer()
         }
     }
     
     private var EmailField: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading) {
             Text("Email*")
                 .modifier(TextLabelModifier())
             TextField("Email", text: $email)
@@ -146,39 +109,21 @@ extension Onboarding {
                 .keyboardType(.emailAddress)
                 .submitLabel(.next)
                 .onSubmit { focusField = .phoneNumber }
-            
-            Button("Next") {
-                if validateEmail(email: email) {
-                   selectedTag = 3
-                } else {
-                    print("no validation")
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .modifier(ButtonModifierPrimary(.primYellow, textColor: .darkAccent))
-            
-            Spacer()
         }
     }
     
     private var PhoneNumberField: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading) {
             Text("Phone Number")
                 .modifier(TextLabelModifier())
-            
             TextField("Phone Number", text: $phoneNumber)
                 .modifier(FieldModifier())
                 .focused($focusField, equals: .phoneNumber)
                 .keyboardType(.phonePad)
                 .submitLabel(.done)
                 .onSubmit { focusField = nil }
-            
-            Register
-            
-            Spacer()
         }
     }
-    
     
     private var Register: some View {
         Button("Register") {
